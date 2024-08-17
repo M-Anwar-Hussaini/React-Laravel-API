@@ -8,7 +8,7 @@ export default function Register() {
   const emailRef = useRef();
   const passwordRef = useRef();
   const passwordConfirmationRef = useRef();
-  const { setUser, setToken, user, token } = useStateContext();
+  const { setUser, setToken } = useStateContext();
 
   const onSubmit = (e) => {
     e.preventDefault();
