@@ -9,9 +9,7 @@ const StateContext = createContext({
 
 // eslint-disable-next-line react/prop-types
 export const ContextProvider = ({ children }) => {
-  const [user, setUser] = useState({
-    name: "Hadi Tabish",
-  });
+  const [user, setUser] = useState(null);
   const [token, _setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
   const setToken = (token) => {
     _setToken(token);
