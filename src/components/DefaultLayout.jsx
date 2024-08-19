@@ -37,8 +37,7 @@ export default function DefaultLayout() {
     return <Navigate to="/login" />;
   }
   if (loading) {
-    console.log("Loading...");
-    return <p>Loading...</p>;
+    return <p className="text-center">Loading...</p>;
   }
   return (
     <div id="defaultLayout">
