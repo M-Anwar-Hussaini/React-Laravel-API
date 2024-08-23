@@ -1,25 +1,27 @@
-import { useEffect } from 'react';
-import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import axiosClient from '../axios-client';
+import { useEffect } from "react";
+import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import axiosClient from "../axios-client";
+import { useStateContext } from "../contexts/ContextProvider";
 
 export default function Userform() {
   const { id } = useParams();
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState(null);
   const naviage = useNavigate();
+  const { setNotification } = useStateContext();
   const [user, setUser] = useState({
     id: null,
-    email: '',
-    name: '',
-    password: '',
-    password_confirmation: '',
+    email: "",
+    name: "",
+    password: "",
+    password_confirmation: "",
   });
   useEffect(() => {
     if (id) {
       getUser();
     }
-  });
+  }, []);
 
   const getUser = async () => {
     setLoading(true);
@@ -40,7 +42,8 @@ export default function Userform() {
     if (user.id) {
       try {
         await axiosClient.put(`/users/${user.id}`, user);
-        naviage('/users');
+        naviage("/users");
+        setNotification("User was successfully uppdated");
       } catch (error) {
         setErrors(error.response.data.errors);
         console.log(error.response.data);
@@ -49,8 +52,9 @@ export default function Userform() {
       }
     } else {
       try {
-        await axiosClient.post('/users', user);
-        naviage('/users');
+        await axiosClient.post("/users", user);
+        naviage("/users");
+        setNotification("User was successfully created");
       } catch (error) {
         setErrors(error.response.data.errors);
         console.log(error);
@@ -61,13 +65,13 @@ export default function Userform() {
   };
 
   return loading ? (
-    <div className='text-center'>Loading...</div>
+    <div className="text-center">Loading...</div>
   ) : (
     <>
       <h1>{user.id ? <>Edit user: {user.name}</> : <>New User</>}</h1>
-      <div className='card animated fadeInDown'>
+      <div className="card animated fadeInDown">
         {errors && (
-          <div className='alert'>
+          <div className="alert">
             {Object.keys(errors).map((key) => (
               <p key={key}>{errors[key][0]}</p>
             ))}
@@ -77,29 +81,29 @@ export default function Userform() {
           <input
             onChange={(e) => setUser({ ...user, name: e.target.value })}
             value={user.name}
-            type='text'
-            placeholder='Name'
+            type="text"
+            placeholder="Name"
           />
           <input
             onChange={(e) => setUser({ ...user, email: e.target.value })}
             value={user.email}
-            type='email'
-            placeholder='Email'
+            type="email"
+            placeholder="Email"
           />
           <input
             onChange={(e) => setUser({ ...user, password: e.target.value })}
-            type='password'
-            placeholder='Password'
+            type="password"
+            placeholder="Password"
           />
           <input
             onChange={(e) =>
               setUser({ ...user, password_confirmation: e.target.value })
             }
-            type='password'
-            placeholder='Password Confirmation'
+            type="password"
+            placeholder="Password Confirmation"
           />
-          <button type='submit' className='btn'>
-            {user.id ? 'Update' : 'Create'}
+          <button type="submit" className="btn">
+            {user.id ? "Update" : "Create"}
           </button>
         </form>
       </div>
